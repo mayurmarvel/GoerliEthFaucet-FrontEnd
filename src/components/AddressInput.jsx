@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react';
 
+
 import { Welcome, TimeLimit , Impostor, Title , LastTransaction} from './index';
+
+const BASE_URL = 'https://127.0.0.1:3000'
 
 const AddressInput = () => {
   // const userAddress = '0xc64de86f4672262a08a89eaf108f992784334f58';
@@ -19,11 +22,22 @@ const AddressInput = () => {
 
   const checkIntervalEligibilty =  async (userAddress) => {
 
-    const result = await fetch(`http://127.0.0.1:3000/getLastClaimed/${userAddress}`)
+    const result = await fetch(`${BASE_URL}getLastClaimed/${userAddress}`)
   .then((response) => response.json())
   .then((data) => {
     // console.log(data)
-    let lastUpdatedTime = Math.floor(data/1000.0)
+    let lastUpdatedTime ;
+    console.log(data);
+    if (data == 0 ) {
+      return true;
+      
+    } else {
+
+      lastUpdatedTime = Math.floor(data/1000.0);
+      
+    }
+
+
     let CurrentTime = Math.floor(new Date().getTime()/1000.0)
     return (CurrentTime - lastUpdatedTime) > claimIntervalInSeconds
     // console.log((CurrentTime - lastUpdatedTime) > claimIntervalInSeconds);
@@ -53,10 +67,12 @@ const AddressInput = () => {
       // checkIntervalEligibilty(userAddress);
       checkIntervalEligibilty(userAddress).then((res) => {
         if (res) {
-
+          console.log(res);
           
           setTimeEligibilty(true)
           sendTransaction(userAddress);
+
+          console.log("yes");
           // console.log("sending Transaction");
           
           
@@ -80,6 +96,7 @@ const AddressInput = () => {
 
   const sendTransaction = async(userAddress) => {
 
+    console.log('yes2');
     // const tempAddress = "0x3d7f37d60264b9070eD6914c7223ED8d5bE38b25"
 
     const requestOptions = {
@@ -89,8 +106,9 @@ const AddressInput = () => {
     }
 
     
-    fetch('http://127.0.0.1:3000/sendEther', requestOptions).then(response => response.json())
+    fetch(`https://faucet.mayapi.xyz/sendEther`, requestOptions).then(response => response.json())
     .then(data =>{
+      console.log('yes3');
       setTransactionHash(data.hash)
       console.log(data)
     } );
