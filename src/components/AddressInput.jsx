@@ -15,7 +15,7 @@ const AddressInput = () => {
   const [transactionHash , setTransactionHash] = useState("");
   const [timeEligibility, setTimeEligibilty] = useState(true)
 
-  const claimIntervalInSeconds = 8;
+  const claimIntervalInSeconds = 84000;
 
   const checkIntervalEligibilty =  async (userAddress) => {
 
